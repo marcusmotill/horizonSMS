@@ -2,11 +2,13 @@ package eventhorizon.horizonsms;
 
 import android.app.Activity;
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -39,12 +41,27 @@ public class MessageListAdapter extends ArrayAdapter {
         convertView.setTag(holder);
 
         holder.tvMessageBody = (TextView) convertView.findViewById(R.id.tvMessageBody);
+        holder.frameLayout = (RelativeLayout) convertView.findViewById(R.id.frameLayout);
+        shouldHide(position, holder.frameLayout);
         holder.tvMessageBody.setText(item.getMessageBody());
         Linkify.addLinks(holder.tvMessageBody, Linkify.ALL);
         return convertView;
     }
 
+    private void shouldHide(int position, View view) {
+        if(position != 0){
+            if(((MessageItem)getItem(position-1)).isSent() && ((MessageItem)getItem(position)).isSent()){
+                view.setVisibility(View.INVISIBLE);
+            }
+
+            if(!((MessageItem)getItem(position-1)).isSent() && !((MessageItem)getItem(position)).isSent()){
+                view.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
     private class ViewHolder {
         TextView tvMessageBody;
+        RelativeLayout frameLayout;
     }
 }

@@ -36,15 +36,31 @@ public class ConversationListAdapter extends ArrayAdapter {
 
         holder.tvContactName = (TextView) convertView.findViewById(R.id.tvContactName);
         holder.tvPreviousMessage = (TextView) convertView.findViewById(R.id.tvPreviousMessage);
+        holder.tvContactImage = (TextView) convertView.findViewById(R.id.tvContactImage);
 
         holder.tvContactName.setText(item.getContactName());
         holder.tvPreviousMessage.setText(item.getPreviousMessage());
+        holder.tvContactImage.setText(getContactImage(item.getContactName()));
 
         return convertView;
+    }
+
+    public String getContactImage(String name) {
+        if (name.substring(0, 1).equals("+")) {
+            return name.substring(0, 1);
+        } else {
+            String[] brokenName = name.split(" ");
+            String newName = "";
+            for (String aBrokenName : brokenName) {
+                newName = newName.concat(aBrokenName.substring(0, 1));
+            }
+            return newName.toUpperCase();
+        }
     }
 
     private class ViewHolder {
         TextView tvContactName;
         TextView tvPreviousMessage;
+        TextView tvContactImage;
     }
 }
